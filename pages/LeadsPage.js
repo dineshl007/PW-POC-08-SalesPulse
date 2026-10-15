@@ -1,4 +1,3 @@
-
 class LeadsPage {
   constructor(page) {
     this.page = page;
@@ -34,7 +33,6 @@ class LeadsPage {
   async isNoMatchingLeadsMessageVisible() {
     const noLeadsMessage = this.page.getByTestId("no-leads");
     await noLeadsMessage.waitFor({ state: "visible" });
-
     return await noLeadsMessage
       .getByText("No leads match.", { exact: true })
       .isVisible();
@@ -42,15 +40,12 @@ class LeadsPage {
 
   async getLeadsTableHeaders() {
     await this.leadsTable.waitFor({ state: "visible" });
-
     const headers = this.leadsTable.locator("thead th");
     const headerCount = await headers.count();
     const headerTexts = [];
-
     for (let i = 0; i < headerCount; i++) {
       headerTexts.push((await headers.nth(i).innerText()).trim());
     }
-
     return headerTexts;
   }
 
@@ -60,10 +55,7 @@ class LeadsPage {
   }
 
   async selectLeadForAssignment(leadName) {
-    const row = this.leadsTable
-      .getByTestId("lead-row")
-      .filter({ hasText: leadName });
-
+    const row = this.leadsTable.getByTestId("lead-row").filter({ hasText: leadName });
     await row.getByRole("checkbox").check();
   }
 
@@ -73,10 +65,7 @@ class LeadsPage {
   }
 
   async getLeadOwner(leadName) {
-    const row = this.leadsTable
-      .getByTestId("lead-row")
-      .filter({ hasText: leadName });
-
+    const row = this.leadsTable.getByTestId("lead-row").filter({ hasText: leadName });
     return (await row.locator("td").nth(5).innerText()).trim();
   }
 
@@ -89,49 +78,31 @@ class LeadsPage {
     const rows = this.leadRows;
     const rowCount = await rows.count();
     let visibleCount = 0;
-
     for (let i = 0; i < rowCount; i++) {
       const row = rows.nth(i);
-
       if (!(await row.isVisible())) {
         continue;
       }
-
       visibleCount++;
-
-      const actualSource = (
-        await row.locator("td").nth(3).innerText()
-      ).trim();
-
-      const actualStatus = (
-        await row.locator("td").nth(4).innerText()
-      ).trim();
-
+      const actualSource = (await row.locator("td").nth(3).innerText()).trim();
+      const actualStatus = (await row.locator("td").nth(4).innerText()).trim();
       if (actualStatus !== status || actualSource !== source) {
         return false;
       }
     }
-
     return visibleCount > 0;
   }
 
   async getSelectedStatusFilter() {
-    return (
-      await this.statusFilter.locator("option:checked").innerText()
-    ).trim();
+    return (await this.statusFilter.locator("option:checked").innerText()).trim();
   }
 
   async getSelectedSourceFilter() {
-    return (
-      await this.sourceFilter.locator("option:checked").innerText()
-    ).trim();
+    return (await this.sourceFilter.locator("option:checked").innerText()).trim();
   }
 
   async getLeadsCountText() {
-    return (
-      await this.page.locator("h1").locator("..").locator("..").innerText()
-    ).trim();
+    return (await this.page.locator("h1").locator("..").locator("..").innerText()).trim();
   }
 }
-
 module.exports = { LeadsPage };

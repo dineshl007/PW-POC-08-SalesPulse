@@ -54,12 +54,12 @@ Feature: SalesPulse Leads
     And I should see the no matching leads message
     And the leads count should be zero
 
-@TC-026
-Scenario: Create a lead and convert it to a deal
-  When I create a lead with unique details
-  Then the newly created lead should appear in the leads table
-  When I open the newly created lead
-  And I convert the lead to a deal
-  Then the lead should show the converted deal banner
-  When I open the converted deal in the pipeline
-  Then the converted deal should be displayed in the pipeline
+  @TC-026
+  Scenario: Create a lead and convert it to a deal
+    When I create a lead with unique details
+    Then the newly created lead should appear in the leads table
+    When I open the newly created lead
+    And I convert the lead to a deal
+    Then the lead should show the converted deal banner
+    When I open the converted deal in the pipeline
+    Then the converted deal should be displayed in the pipeline

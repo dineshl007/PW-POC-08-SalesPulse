@@ -1,4 +1,3 @@
-
 Feature: SalesPulse Footer Links
 
   Background:

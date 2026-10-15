@@ -2,7 +2,6 @@
 class PipelinePage {
   constructor(page) {
     this.page = page;
-
     this.heading = page.getByTestId('page-title');
     this.stageColumns = page.locator('[data-testid^="stage-"]');
     this.dealCards = page.getByTestId('deal-card');
@@ -24,7 +23,6 @@ class PipelinePage {
   async moveDeal(company, targetStage) {
     const deal = await this.getDeal(company);
     const dropdown = deal.getByRole('combobox');
-
     await dropdown.selectOption(targetStage.toLowerCase());
   }
 
@@ -37,13 +35,10 @@ class PipelinePage {
     const column = await this.getStage(stage);
     const totalText = await column.locator('header').innerText();
     const match = totalText.match(/\$[\d,]+/);
-
     if (!match) {
       throw new Error(`Could not find the total for stage: ${stage}`);
     }
-
     return Number(match[0].replace(/[$,]/g, ''));
   }
 }
-
 module.exports = { PipelinePage };
