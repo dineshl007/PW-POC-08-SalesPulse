@@ -1,49 +1,66 @@
-# SalesPulse UI Test Automation
+# SalesPulse UI Test Automation — PW-POC-08
 
-A Playwright and Cucumber proof of concept for testing the SalesPulse CRM web application. Scenarios are written in Gherkin, with reusable browser interactions organized using the Page Object Model (POM).
+## 1. Project Overview
 
-## Features
+SalesPulse UI Test Automation is a Proof of Concept (POC) for automating business workflows in the SalesPulse CRM web application using Playwright, JavaScript, and Cucumber.js.
 
-- Readable Gherkin scenarios for CRM workflows
-- Page objects for reusable page locators and actions
-- Cucumber HTML execution report
-- Failure screenshots and Playwright traces
-- Chromium by default, with optional Firefox and WebKit runs
+The project uses Gherkin feature files to describe test scenarios and the Page Object Model (POM) to organize reusable page locators and browser interactions.
 
-## Technology
+The objective is to demonstrate maintainable UI automation, business workflow validation, negative testing, browser compatibility, and automated test reporting.
 
-| Tool | Purpose |
-| --- | --- |
-| JavaScript and Node.js | Test implementation and runtime |
+**Application under test:** [SalesPulse CRM](https://www.practiceqaautomation.com/apps/crm)
+
+**Project status:** Proof of Concept — further validation and improvements are required before acceptance as a complete automation framework.
+
+## 2. Objectives
+
+- Automate critical CRM workflows.
+- Validate login, lead management, and deal pipeline functionality.
+- Extract and verify business outcomes using meaningful assertions.
+- Implement positive, negative, and boundary test scenarios.
+- Reuse browser interactions through page objects.
+- Generate Cucumber HTML reports and diagnostic artifacts.
+- Support Chromium, Firefox, and WebKit execution.
+- Document setup, execution, test coverage, and known limitations.
+
+## 3. Features
+
+- Readable Gherkin scenarios using Cucumber.js.
+- Page Object Model for reusable page interactions.
+- Login and authentication scenarios.
+- Lead creation and lead management scenarios.
+- Deal pipeline management and stage-transition scenarios.
+- Footer link checks.
+- Positive and negative validation scenarios.
+- Cucumber HTML execution reporting.
+- Failure screenshots and Playwright trace support.
+- Browser selection through environment variables.
+- Environment-based configuration using dotenv.
+
+## 4. Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| JavaScript | Test implementation |
+| Node.js and npm | Runtime and dependency management |
 | Playwright | Browser automation |
-| Cucumber.js | Gherkin test execution |
-| dotenv | Local environment configuration |
+| Cucumber.js | BDD test execution |
+| Gherkin | Business-readable test scenarios |
+| Page Object Model | Reusable page locators and actions |
+| dotenv | Environment configuration |
+| VS Code | Development and debugging |
 
-## Project Structure
+## 5. Project Structure
 
+```text
 PW-POC-08-SalesPulse/
-├── config/                 # Test configuration
-├── features/               # Gherkin feature files
-├── pages/                  # Page Object Model classes
-├── reports/                # Generated Cucumber HTML report
-├── screenshots/            # Screenshots captured for failures
-├── step-definitions/       # Gherkin step implementations
-├── support/                # Cucumber hooks and browser lifecycle
-├── test-data/              # Test data
-├── traces/                 # Playwright traces captured for failures
-├── .env.example            # Environment variable template
-├── cucumber.js             # Cucumber configuration
-├── package.json            # Dependencies and npm scripts
-└── package-lock.json       # Locked dependency versions
-
-
-
 ├── .vscode/
+│   └── settings.json
 ├── config/
 ├── features/
 │   ├── footer.feature
-│   ├── leads.feature
 │   ├── lead_management.feature
+│   ├── leads.feature
 │   ├── login.feature
 │   └── pipeline.feature
 ├── pages/
@@ -57,8 +74,8 @@ PW-POC-08-SalesPulse/
 ├── screenshots/
 ├── step-definitions/
 │   ├── footer.steps.js
-│   ├── leads.steps.js
 │   ├── lead_management.steps.js
+│   ├── leads.steps.js
 │   ├── login.steps.js
 │   └── pipeline.steps.js
 ├── support/
@@ -69,58 +86,151 @@ PW-POC-08-SalesPulse/
 ├── .gitignore
 ├── cucumber.js
 ├── package.json
-└── package-lock.json
+├── package-lock.json
+└── README.md
+```
 
-## Prerequisites
+**Directory responsibilities**
 
-- Node.js LTS and npm
-- Access to the target SalesPulse CRM application
-- Valid test credentials for the application
+- `config/` — configuration-related files, if implemented.
+- `features/` — Gherkin feature files and scenarios.
+- `pages/` — Page Object Model classes.
+- `reports/` — generated Cucumber HTML reports.
+- `screenshots/` — screenshots captured during test failures.
+- `step-definitions/` — implementations of Gherkin steps.
+- `support/` — Cucumber hooks and browser lifecycle management.
+- `test-data/` — test data files, if implemented.
+- `traces/` — Playwright trace archives, if generated.
+- `.env.example` — template for required environment variables.
+- `cucumber.js` — Cucumber configuration.
+- `package.json` — project dependencies and npm scripts.
+- `package-lock.json` — locked dependency versions.
 
-Check your Node.js and npm versions:
+Generated reports, screenshots, traces, and local credentials may not exist until the relevant test runs or setup steps are completed.
 
-```powershell
+## 6. Test Coverage
+
+The project currently contains five feature files covering the following areas.
+
+| Feature file | Coverage area |
+|---|---|
+| `login.feature` | Login and authentication scenarios |
+| `leads.feature` | Lead-related operations |
+| `lead_management.feature` | Lead management and related workflows |
+| `pipeline.feature` | Deal pipeline and stage management |
+| `footer.feature` | Footer links and navigation checks |
+
+The reported repository review identified 25 scenarios, tagged from `TC-001` to `TC-026`, with gaps in end-to-end workflow coverage and some business assertions.
+
+The coverage areas include:
+
+- Valid, invalid, and empty login inputs.
+- Lead creation and duplicate-email validation.
+- Contact and note validation.
+- Lead filtering and no-results behavior.
+- Pipeline stage transitions and persistence after refresh.
+- Footer navigation checks.
+
+**Coverage status:** The scenario list describes the current scope; it does not establish that every scenario passes or meets its acceptance criteria. Review the latest execution report and scenario assertions to determine actual coverage.
+
+## 7. Prerequisites
+
+Install the following:
+
+- Node.js LTS.
+- npm.
+- Visual Studio Code or another compatible editor.
+- Access to the target SalesPulse CRM application.
+- Approved test credentials.
+
+Verify the installation:
+
+```bash
 node --version
 npm --version
 ```
 
-## Setup
+## 8. Environment Configuration and Credentials
 
-Run these commands from the project root in PowerShell:
+Create a local `.env` file from the provided template.
+
+### PowerShell
 
 ```powershell
-npm install
-npx playwright install chromium
 Copy-Item .env.example .env
 ```
 
-Open `.env` and provide the application URL and approved test credentials:
+### macOS / Linux
+
+```bash
+cp .env.example .env
+```
+
+Configure the required values in `.env` using the actual variable names expected by the project:
 
 ```dotenv
 BASE_URL=https://www.practiceqaautomation.com/apps/crm
-CRM_EMAIL=your_test_email
-CRM_PASSWORD=your_test_password
+CRM_EMAIL=your_approved_test_email
+CRM_PASSWORD=your_approved_test_password
 ```
 
-Do not commit `.env` or put real credentials in source files. The checked-in `.env.example` contains placeholders for credentials.
+Use only approved test credentials supplied by the project owner or environment administrator. Replace the example values with your own authorized test values.
 
-## Run Tests
+**Security requirements**
 
-Run the complete suite:
+- Never commit `.env` to GitHub.
+- Do not place real credentials in feature files, page objects, or step definitions.
+- Keep `.env.example` limited to placeholder values.
+- Ensure `.gitignore` excludes `.env`.
+- Review screenshots, traces, and reports before sharing because they may contain sensitive page content.
 
-```powershell
+The `.env` variables must match the names used by the current project code.
+
+## 9. Installation
+
+Open a terminal in the project root.
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Install Chromium:
+
+```bash
+npx playwright install chromium
+```
+
+To run Firefox and WebKit, install their browsers:
+
+```bash
+npx playwright install firefox webkit
+```
+
+These commands install browser binaries; the browser tests still need to be executed to demonstrate compatibility.
+
+## 10. Running the Tests
+
+### Run the complete test suite
+
+```bash
 npm test
 ```
 
-Run the valid-credentials login scenario:
+This command assumes the `test` script is configured in `package.json`.
 
-```powershell
+### Run the login feature
+
+```bash
 npm run test:login
 ```
 
-Run an individual feature:
+This command assumes the `test:login` script exists in `package.json`.
 
-```powershell
+### Run individual features
+
+```bash
 npx cucumber-js features/login.feature
 npx cucumber-js features/leads.feature
 npx cucumber-js features/lead_management.feature
@@ -128,54 +238,197 @@ npx cucumber-js features/pipeline.feature
 npx cucumber-js features/footer.feature
 ```
 
-The hooks launch a visible Chromium browser by default. To use an installed Google Chrome instead:
+If the project uses custom Cucumber profiles or configuration, use the corresponding configured command.
+
+## 11. Browser Configuration
+
+The project supports browser selection through environment variables where implemented.
+
+### Chromium
+
+```powershell
+$env:BROWSER = "chromium"
+npm test
+```
+
+### Google Chrome channel
 
 ```powershell
 $env:BROWSER = "chromium"
 $env:CHROME_CHANNEL = "chrome"
-npx cucumber-js features/login.feature
+npm test
 ```
 
-Firefox and WebKit are optional. Install their browsers first with `npx playwright install firefox webkit`, then select one for the current PowerShell session:
+### Firefox
 
 ```powershell
 $env:BROWSER = "firefox"
 npm test
 ```
 
+### WebKit
+
 ```powershell
 $env:BROWSER = "webkit"
 npm test
 ```
 
-WebKit provides browser-engine coverage; it is not a substitute for testing in native Safari on macOS or iOS. To restore the default configuration in the current session:
+To restore the default browser selection in PowerShell:
 
 ```powershell
 $env:BROWSER = "chromium"
 Remove-Item Env:CHROME_CHANNEL -ErrorAction SilentlyContinue
 ```
 
-## Reports and Failure Artifacts
+These commands assume the hooks read the specified environment variables and launch the selected browser.
 
-- **HTML report:** `reports/cucumber-report.html`. Open it after a run with `Invoke-Item reports/cucumber-report.html`.
-- **Screenshots:** Full-page screenshots for failed scenarios are saved in `screenshots/`.
-- **Traces:** Playwright trace archives for failed scenarios are saved in `traces/`. Open one with `npx playwright show-trace traces/failure-<timestamp>.zip`, replacing the example filename with the generated archive name.
+WebKit provides browser-engine coverage; it is not equivalent to testing native Safari on macOS or iOS.
 
-The HTML report is regenerated on subsequent runs. Screenshots and traces may contain page content or test data; review them before sharing.
+**Cross-browser status:** Record the actual result for each browser after execution. Browser configuration alone is not evidence of successful cross-browser testing.
 
-## Coverage
+## 12. Reports and Debugging
 
-The current feature files cover login, leads, lead management, pipeline workflows, and footer links. Run `npm test` to see the current results; previous run counts may not reflect the current state of the suite.
+### Cucumber HTML report
 
-## Troubleshooting
+The configured report location is:
 
-- **Browser executable is missing:** Run `npx playwright install chromium`, or install the browser you selected with `BROWSER`.
-- **URL or credentials are unavailable:** Confirm `.env` exists in the project root and contains the expected values.
-- **The wrong browser launches:** Check `BROWSER` and `CHROME_CHANNEL` in the current PowerShell session.
-- **A scenario fails:** Review the HTML report, failure screenshot, and matching trace archive.
+```text
+reports/cucumber-report.html
+```
 
-## Security and Project Status
+Open it in PowerShell:
 
-Generated reports, screenshots, traces, `node_modules/`, and `.env` are excluded from version control by the project's `.gitignore`. Keep real credentials and customer data out of committed files, and review failure artifacts before sharing them.
+```powershell
+Invoke-Item reports/cucumber-report.html
+```
 
-This repository is a proof of concept. Validate browser coverage, test stability, test-data management, CI execution, and artifact retention against project requirements before relying on it as a production test framework.
+The report is generated or updated according to the current Cucumber configuration.
+
+### Failure screenshots
+
+Screenshots are intended to be saved in:
+
+```text
+screenshots/
+```
+
+### Playwright traces
+
+Trace archives are intended to be saved in:
+
+```text
+traces/
+```
+
+Open a generated trace:
+
+```bash
+npx playwright show-trace traces/<actual-trace-filename>.zip
+```
+
+Replace the placeholder with the real filename created by the test run.
+
+**Execution evidence:** Attach or reference a genuine test report and representative failure artifacts when submitting the POC. Do not claim a pass count or browser result without an actual run.
+
+## 13. Test Assertions and Validation
+
+Automation should validate business outcomes, not only page navigation or element presence.
+
+Examples of useful assertions include:
+
+- Confirm that login succeeds with valid credentials.
+- Confirm that invalid credentials produce the expected error.
+- Confirm that a newly created lead appears in the lead list.
+- Confirm that duplicate-email validation prevents an invalid duplicate record.
+- Confirm that a pipeline stage changes to the expected target.
+- Confirm that the deal value remains correct after a stage transition.
+- Confirm that the updated pipeline state persists after refreshing the page.
+
+The actual expected results should be based on the application's behavior and the acceptance criteria for each scenario.
+
+## 14. Known Limitations and Improvement Areas
+
+The current review identified the following areas requiring further work:
+
+1. Domain overview and workflow documentation need to be added.
+2. Three critical end-to-end workflows need to be demonstrated.
+3. Some assertions need stronger business-outcome validation.
+4. Test data and seed values need more maintainable management.
+5. Cross-browser execution evidence needs to be produced.
+6. Browser headless mode and CI execution need improvement.
+7. Page-object responsibilities and duplicated locators need review.
+8. Field validation and boundary-case coverage need expansion.
+9. Screenshots and traces should be reviewed for appropriate report attachment and retention.
+10. The use of JavaScript should be confirmed against the project's TypeScript requirement.
+
+These are improvement items, not claims that every issue has already been resolved.
+
+## 15. Continuous Integration
+
+A CI workflow has not been demonstrated in the reviewed repository.
+
+A future CI setup should:
+
+- Install the required Node.js version and npm dependencies.
+- Install the required Playwright browser binaries.
+- Load credentials through secure CI secrets.
+- Run the intended test suite in headless mode.
+- Publish test reports and appropriate failure artifacts.
+- Return a failing status when required assertions fail.
+
+Add a CI workflow only after confirming the required execution commands and environment settings.
+
+## 16. Troubleshooting
+
+### Browser executable missing
+
+Install the required browser:
+
+```bash
+npx playwright install chromium
+```
+
+For Firefox or WebKit, install the relevant browser binaries.
+
+### Environment variables are missing
+
+Confirm that `.env` exists in the project root and contains the variable names used by the code.
+
+### The wrong browser launches
+
+Check `BROWSER`, `CHROME_CHANNEL`, and the browser-launching logic in `support/hooks.js`.
+
+### A scenario fails
+
+Review:
+
+1. The Cucumber console output.
+2. The generated HTML report.
+3. The screenshot, if generated.
+4. The Playwright trace, if generated.
+5. The relevant feature file, step definition, and page object.
+
+### The test passes without validating the expected business result
+
+Review the assertions in the step definition and page object. Replace weak checks with explicit assertions against the expected application state.
+
+## 17. Future Enhancements
+
+- Complete three critical end-to-end workflows.
+- Strengthen assertions for business outcomes.
+- Move hard-coded values into reusable test data.
+- Add missing email-format and boundary validations.
+- Investigate drag-and-drop pipeline interaction where supported.
+- Improve page-object and component separation.
+- Demonstrate Chromium, Firefox, and WebKit execution.
+- Add CI integration and headless execution.
+- Improve report attachment and artifact management.
+- Add linting and formatting checks where appropriate.
+
+## 18. Conclusion
+
+SalesPulse UI Test Automation is a Playwright and Cucumber proof of concept demonstrating BDD-style scenario definition, reusable page objects, CRM workflow automation, and test reporting.
+
+The framework provides a useful foundation. The next steps are to strengthen business assertions, complete required end-to-end coverage, make execution reproducible, improve test-data management, and provide verifiable execution evidence.
+
+The POC should be considered ready for acceptance only after the required criteria have been implemented, executed, and reviewed.

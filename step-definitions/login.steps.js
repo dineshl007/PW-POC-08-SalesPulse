@@ -1,3 +1,4 @@
+
 const { Given, When, Then } = require("@cucumber/cucumber");
 const assert = require("node:assert/strict");
 const { LoginPage } = require("../pages/LoginPage");
@@ -8,11 +9,16 @@ Given("I am on the SalesPulse login page", async function () {
 });
 
 When("I sign in with valid credentials", async function () {
-  await this.loginPage.signIn(process.env.CRM_EMAIL, process.env.CRM_PASSWORD);
+  const email = process.env.CRM_EMAIL;
+  const password = process.env.CRM_PASSWORD;
+  if (!email || !password) {
+    throw new Error("CRM_EMAIL or CRM_PASSWORD is missing from .env");
+  }
+  await this.loginPage.signIn(email, password);
 });
 
 When("I sign in with invalid credentials", async function () {
-  await this.loginPage.signIn("invalid-user@example.com","InvalidPassword123!",);
+  await this.loginPage.signIn( "invalid-user@example.com","InvalidPassword123!");
 });
 
 When("I submit the login form with empty credentials", async function () {
@@ -31,12 +37,11 @@ Then("I should see the dashboard welcome heading", async function () {
 
 Then("I should remain on the login page", async function () {
   await this.page.waitForLoadState("domcontentloaded");
-  assert.doesNotMatch(this.page.url(), /\/apps\/crm\/dashboard\/?$/);
+  assert.doesNotMatch(this.page.url(),/\/apps\/crm\/dashboard\/?$/);
 });
 
 Then("I should see the login error message", async function () {
-  const assert = require("node:assert/strict");
   const errorMessage = this.page.getByTestId("crm-login-error");
   await errorMessage.waitFor({ state: "visible" });
-  assert.equal(await errorMessage.textContent(),"Those credentials don't match an account",);
+  assert.equal((await errorMessage.textContent()).trim(),"Those credentials don't match an account");
 });
