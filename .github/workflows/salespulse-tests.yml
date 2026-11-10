@@ -1,0 +1,41 @@
+
+name: SalesPulse POC - Playwright Tests
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+jobs:
+  salespulse-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run SalesPulse tests
+        run: npm test
+        env:
+          HEADLESS: "true"
+          BASE_URL: ${{ secrets.BASE_URL }}
+          CRM_EMAIL: ${{ secrets.CRM_EMAIL }}
+          CRM_PASSWORD: ${{ secrets.CRM_PASSWORD }}

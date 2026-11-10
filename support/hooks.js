@@ -31,7 +31,7 @@ Before(async function () {
     );
   }
 
-  const headless = (process.env.HEADLESS || "false").toLowerCase() === "true";
+  const headless =(process.env.HEADLESS || (process.env.CI ? "true" : "false")).toLowerCase() === "true";
   const launchOptions = { headless };
 
   if (browserName === "chromium" && process.env.CHROME_CHANNEL === "chrome") {

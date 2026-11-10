@@ -4,8 +4,8 @@ Feature: SalesPulse Footer Links
     Given I am logged in to SalesPulse
 
   @TC-012
-  Scenario: Verify footer contains 25 links
-    Then the footer should contain 25 links
+  Scenario: Verify footer contains 26 links
+    Then the footer should contain 26 links
 
   @TC-013
   Scenario: Verify all footer links can be opened
