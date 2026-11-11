@@ -32,27 +32,32 @@ class FooterPage {
   async openFooterLink(href) {
     const baseUrl = new URL(this.page.url()).origin;
     const targetUrl = new URL(href, baseUrl).href;
+
+    if (new URL(targetUrl).pathname.toLowerCase().endsWith('.pdf')) {
+        const response = await this.page.context().request.get(targetUrl);
+        const contentType = response.headers()['content-type'] || '';
+        return {
+            opened: response.ok() && contentType.includes('application/pdf'),
+            url: targetUrl,
+            error: response.ok() ? null : `HTTP ${response.status()}`
+        };
+    }
     const linkPage = await this.page.context().newPage();
 
     try {
-      await linkPage.goto(targetUrl, {
-        waitUntil: "domcontentloaded",
-        timeout: 15000,
-      });
-
-      return {
-        opened: true,
-        url: linkPage.url(),
-      };
+        await linkPage.goto(targetUrl, {waitUntil: 'domcontentloaded',timeout: 15000,});
+        return {
+            opened: true,
+            url: linkPage.url(),
+        };
     } catch (error) {
-      return {
-        opened: false,
-        url: targetUrl,
-        error: error.message,
-      };
-    } finally {
-      await linkPage.close();
-    }
-  }
+        return {
+            opened: false,
+            url: targetUrl,
+            error: error.message,
+        };
+    } 
+    finally {await linkPage.close();}
+}
 }
 module.exports = FooterPage;
