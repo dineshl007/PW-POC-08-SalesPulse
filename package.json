@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cucumber-js",
+    "test": "cucumber-js --format progress --format html:playwright/report/cucumber-report.html",
     "test:login": "cucumber-js --name \"Login with valid credentials\""
   },
   "keywords": [],

@@ -44,6 +44,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-html-report
-          path: playwright-report/
+          name: SalesPulse-Playwright-Report
+          path: playwright/report/
+          if-no-files-found: error
           retention-days: 30
