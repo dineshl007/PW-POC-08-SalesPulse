@@ -1,0 +1,106 @@
+﻿diff --git a/pages/LoginPage.js b/pages/LoginPage.js
+index 5c322a8..d10dff0 100644
+--- a/pages/LoginPage.js
++++ b/pages/LoginPage.js
+@@ -1,34 +1,43 @@
+ class LoginPage {
+   constructor(page) {
+     this.page = page;
+-    this.emailInput = page.locator('#crm-email');
+-    this.passwordInput = page.locator('input[type="password"]');
+-    this.signInButton = page.getByTestId('crm-login');
++    this.emailInput = page.getByTestId("crm-email");
++    this.passwordInput = page.getByLabel("Password", {exact: true,});
++    this.signInButton = page.getByRole("button", {name: "Sign in",exact: true,});
++    this.loginError = page.getByTestId("crm-login-error");
+   }
+ 
+   async open() {
+-    const baseUrl = process.env.BASE_URL || 'https://www.practiceqaautomation.com/apps/crm';
+-    await this.page.goto(baseUrl, { waitUntil: 'domcontentloaded' });
++    const baseUrl = process.env.BASE_URL;
++    if (!baseUrl) {
++      throw new Error("BASE_URL is missing from the .env file.");
++    }
++    await this.page.goto(baseUrl);
+   }
+ 
+   async signIn(email, password) {
+-    await this.emailInput.waitFor({ state: 'visible' });
+-    await this.passwordInput.waitFor({ state: 'visible' });
+-    await this.signInButton.waitFor({ state: 'visible' });
++    await this.emailInput.waitFor({ state: "visible" });
+     await this.emailInput.fill(email);
++    await this.passwordInput.waitFor({ state: "visible" });
+     await this.passwordInput.fill(password);
+     await this.signInButton.click();
+   }
+ 
++  async login(email, password) {
++    return this.signIn(email, password);
++  }
++
+   async submitEmptyCredentials() {
++    await this.emailInput.waitFor({ state: "visible" });
+     await this.emailInput.clear();
++    await this.passwordInput.waitFor({ state: "visible" });
+     await this.passwordInput.clear();
+     await this.signInButton.click();
+-}
++  }
++  
+   async isLoginErrorVisible() {
+-    const errorMessage = this.page.getByTestId("crm-login-error");
+-    await errorMessage.waitFor({ state: "visible" });
+-    return await errorMessage.isVisible();
+-}
++    await this.loginError.waitFor({ state: "visible" });
++    return this.loginError.isVisible();
++  }
+ }
+ module.exports = { LoginPage };
+\ No newline at end of file
+diff --git a/step-definitions/login.steps.js b/step-definitions/login.steps.js
+index 5cb1e9e..5b25d70 100644
+--- a/step-definitions/login.steps.js
++++ b/step-definitions/login.steps.js
+@@ -1,3 +1,4 @@
++
+ const { Given, When, Then } = require("@cucumber/cucumber");
+ const assert = require("node:assert/strict");
+ const { LoginPage } = require("../pages/LoginPage");
+@@ -8,11 +9,16 @@ Given("I am on the SalesPulse login page", async function () {
+ });
+ 
+ When("I sign in with valid credentials", async function () {
+-  await this.loginPage.signIn(process.env.CRM_EMAIL, process.env.CRM_PASSWORD);
++  const email = process.env.CRM_EMAIL;
++  const password = process.env.CRM_PASSWORD;
++  if (!email || !password) {
++    throw new Error("CRM_EMAIL or CRM_PASSWORD is missing from .env");
++  }
++  await this.loginPage.signIn(email, password);
+ });
+ 
+ When("I sign in with invalid credentials", async function () {
+-  await this.loginPage.signIn("invalid-user@example.com","InvalidPassword123!",);
++  await this.loginPage.signIn( "invalid-user@example.com","InvalidPassword123!");
+ });
+ 
+ When("I submit the login form with empty credentials", async function () {
+@@ -31,12 +37,11 @@ Then("I should see the dashboard welcome heading", async function () {
+ 
+ Then("I should remain on the login page", async function () {
+   await this.page.waitForLoadState("domcontentloaded");
+-  assert.doesNotMatch(this.page.url(), /\/apps\/crm\/dashboard\/?$/);
++  assert.doesNotMatch(this.page.url(),/\/apps\/crm\/dashboard\/?$/);
+ });
+ 
+ Then("I should see the login error message", async function () {
+-  const assert = require("node:assert/strict");
+   const errorMessage = this.page.getByTestId("crm-login-error");
+   await errorMessage.waitFor({ state: "visible" });
+-  assert.equal(await errorMessage.textContent(),"Those credentials don't match an account",);
++  assert.equal((await errorMessage.textContent()).trim(),"Those credentials don't match an account");
+ });
+\ No newline at end of file

@@ -1,7 +1,7 @@
 class FooterPage {
   constructor(page) {
     this.page = page;
-    this.footer = page.locator("footer");
+    this.footer = page.locator("foooter");
     this.footerLinks = this.footer.locator("a");
   }
 
